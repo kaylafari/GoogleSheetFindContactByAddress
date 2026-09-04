@@ -1,0 +1,8 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "mailer-check",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-08-27"
+  // Configure GOOGLE_SERVICE_ACCOUNT_EMAIL and GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY
+  // as Cloudflare secrets with `wrangler secret bulk .dev.vars`.
+}

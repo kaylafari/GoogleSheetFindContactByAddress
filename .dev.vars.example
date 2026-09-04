@@ -1,0 +1,4 @@
+GOOGLE_SERVICE_ACCOUNT_EMAIL=service-account-name@project-id.iam.gserviceaccount.com
+# Keep the literal \n separators when pasting a one-line private key.
+GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\n...\n-----END PRIVATE KEY-----\n"
+WEBHOOK_AUTH_TOKEN=replace-with-a-long-random-token
