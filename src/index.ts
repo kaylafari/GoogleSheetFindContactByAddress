@@ -34,8 +34,6 @@ interface BatchValuesResponse {
   valueRanges?: ValuesResponse[];
 }
 
-type Row = Record<string, unknown>;
-
 interface MatchResult {
   match: "yes" | "no" | "maybe";
   selection: string | null;
@@ -246,7 +244,7 @@ async function selectedResult(
     `https://sheets.googleapis.com/v4/spreadsheets/${encodeURIComponent(spreadsheetId)}/values/${encodeURIComponent(`${title}!${candidate.index}:${candidate.index}`)}`,
     token,
   );
-  return { match, selection: JSON.stringify(rowToJson(headers, row.values?.[0] ?? candidate.values)), source: title };
+  return { match, selection: rowToText(headers, row.values?.[0] ?? candidate.values), source: title };
 }
 
 async function findCandidatesInSheet(
@@ -315,14 +313,21 @@ function getColumns(headers: unknown[]): Record<string, number | undefined> {
   return result;
 }
 
-function rowToJson(headers: unknown[], values: unknown[]): Row {
-  const row: Row = {};
+function rowToText(headers: unknown[], values: unknown[]): string {
+  const usedKeys = new Set<string>();
+  const lines: string[] = [];
   headers.forEach((header, index) => {
     const preferredKey = String(header ?? "").trim() || `column_${index + 1}`;
-    const key = Object.hasOwn(row, preferredKey) ? `${preferredKey}_${index + 1}` : preferredKey;
-    row[key] = values[index] ?? "";
+    let key = preferredKey;
+    let suffix = 2;
+    while (usedKeys.has(key)) {
+      key = `${preferredKey}_${suffix}`;
+      suffix += 1;
+    }
+    usedKeys.add(key);
+    lines.push(`${key}: ${String(values[index] ?? "")}`);
   });
-  return row;
+  return lines.join("\n");
 }
 
 function validateQuery(query: URLSearchParams): MatchRequest {
