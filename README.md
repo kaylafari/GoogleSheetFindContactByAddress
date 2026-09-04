@@ -15,7 +15,7 @@ Required query parameters are `googleDriveFolderUrl`, `date`, `address`, `city`,
 Responses use `"yes"`, `"no"`, or `"maybe"` for `match`:
 
 ```json
-{ "match": "yes", "selection": { "...sheet headers": "...selected row values" }, "source": "Los Angeles" }
+{ "match": "yes", "selection": "{\"First Name\":\"Jane\",\"Last Name\":\"Doe\"}", "source": "Los Angeles" }
 ```
 
 or:
@@ -24,7 +24,7 @@ or:
 { "match": "no", "selection": null, "source": null }
 ```
 
-`"yes"` means an address match has at least one matching supplied name. `"maybe"` means either an address match has no matching supplied name, or no address matched but a supplied first/last-name combination did. `"no"` means neither search found a row. `source` is the worksheet/tab (table) name where the selected row was found, or `null` when no row is selected. Failures use an error status with `match: "no"`, `selection: null`, and `{ "error": "..." }`: `404` for a missing quarter folder or dated sheet, `409` for ambiguous Drive matches, and `422` when no sheet has the required address headers.
+`"yes"` means an address match has at least one matching supplied name. `"maybe"` means either an address match has no matching supplied name, or no address matched but a supplied first/last-name combination did. `"no"` means neither search found a row. `selection` is a single string containing a JSON-formatted object of the selected row's sheet headers and values; it is `null` when no row is selected. `source` is the worksheet/tab (table) name where the selected row was found, or `null` when no row is selected. Failures use an error status with `match: "no"`, `selection: null`, and `{ "error": "..." }`: `404` for a missing quarter folder or dated sheet, `409` for ambiguous Drive matches, and `422` when no sheet has the required address headers.
 
 ## Google setup
 

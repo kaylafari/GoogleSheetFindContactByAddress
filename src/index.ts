@@ -38,7 +38,7 @@ type Row = Record<string, unknown>;
 
 interface MatchResult {
   match: "yes" | "no" | "maybe";
-  selection: Row | null;
+  selection: string | null;
   source: string | null;
 }
 
@@ -246,7 +246,7 @@ async function selectedResult(
     `https://sheets.googleapis.com/v4/spreadsheets/${encodeURIComponent(spreadsheetId)}/values/${encodeURIComponent(`${title}!${candidate.index}:${candidate.index}`)}`,
     token,
   );
-  return { match, selection: rowToJson(headers, row.values?.[0] ?? candidate.values), source: title };
+  return { match, selection: JSON.stringify(rowToJson(headers, row.values?.[0] ?? candidate.values)), source: title };
 }
 
 async function findCandidatesInSheet(
